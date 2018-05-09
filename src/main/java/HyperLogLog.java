@@ -5,7 +5,7 @@ import com.google.common.hash.*;
 
 
 public class HyperLogLog {
-    private int[] buckets;
+    private byte[] buckets;
     private double currentSum;
     private int nonZeroBuckets = 0;
     private HashFunction HASH;
@@ -16,7 +16,7 @@ public class HyperLogLog {
         if (!isPowerOfTwo(numberOfBuckets)) {
             System.out.println("numberOfBuckets must be a power of two");
         }
-        buckets = new int[numberOfBuckets];
+        buckets = new byte[numberOfBuckets];
         currentSum = buckets.length;
         HASH = Hashing.murmur3_128();
     }
@@ -29,7 +29,7 @@ public class HyperLogLog {
         }
         return setBit == 1;
     }
-    int[] getBuckets() {
+    byte[] getBuckets() {
         return buckets;
     }
     long getHash(long input) {
@@ -58,7 +58,7 @@ public class HyperLogLog {
         if (lowestBit > previous) {
             currentSum -= 1.0 / (1L << previous);
             currentSum += 1.0 / (1L << lowestBit);
-            buckets[bucket] = lowestBit;
+            buckets[bucket] = (byte)lowestBit;
         }
     }
     public void add(String input) {
@@ -75,7 +75,7 @@ public class HyperLogLog {
         if (lowestBit > previous) {
             currentSum -= 1.0 / (1L << previous);
             currentSum += 1.0 / (1L << lowestBit);
-            buckets[bucket] = lowestBit;
+            buckets[bucket] = (byte)lowestBit;
         }
     }
     public long estimate() {
